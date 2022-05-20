@@ -8,6 +8,14 @@ public:
     friend class borrower;
     friend class lender;
 };
+class account_balance
+{
+    public:
+    virtual int balance()
+    {
+        return 10000;
+    }
+};
 class borrower
 {
 private:
@@ -25,40 +33,16 @@ public:
         number_of_payments = number_of_payments_;
         payments_paid = 0;
     }
-    void set_account_name(string s)
-    {
-        a.account_name = s;
-    }
-    void set_account_number(string s)
-    {
-        a.account_number = s;
-    }
-    void set_amount_of_loan(int x)
-    {
-        amount_of_loan = x;
-    }
-    void set_number_of_payments(int x)
-    {
-        number_of_payments = x;
-    }
-    float payment_per_month()
-    {
-        return (float)(amount_of_loan * (1 + (float)(interest_rate) / 100)) / number_of_payments;
-    }
-    int payment_paid()
-    {
-        return ++payments_paid;
-    }
-    int number_of_payments_to_be_paid()
-    {
-        return number_of_payments - payments_paid;
-    }
-    float amount_to_be_paid()
-    {
-        return number_of_payments_to_be_paid() * payment_per_month();
-    }
+    void set_account_name(string s) { a.account_name = s; }
+    void set_account_number(string s) { a.account_number = s; }
+    void set_amount_of_loan(int x) { amount_of_loan = x; }
+    void set_number_of_payments(int x) { number_of_payments = x; }
+    float payment_per_month() { return (float)(amount_of_loan * (1 + (float)(interest_rate) / 100)) / number_of_payments; }
+    int payment_paid() { return ++payments_paid; }
+    int number_of_payments_to_be_paid() { return number_of_payments - payments_paid; }
+    float amount_to_be_paid() { return number_of_payments_to_be_paid() * payment_per_month(); }
 };
-class lender
+class lender:public account_balance
 {
 private:
     account a;
@@ -66,21 +50,13 @@ private:
     int duration_in_months;
 
 public:
-    void set_account_name(string s)
+    void set_account_name(string s) { a.account_name = s; }
+    void set_account_number(string s) { a.account_number = s; }
+    void set_money_to_lended(int x) { money_to_lended = x; }
+    void set_duration_in_months(int x) { duration_in_months = x; }
+    int balance()
     {
-        a.account_name = s;
-    }
-    void set_account_number(string s)
-    {
-        a.account_number = s;
-    }
-    void set_money_to_lended(int x)
-    {
-        money_to_lended = x;
-    }
-    void set_duration_in_months(int x)
-    {
-        duration_in_months = x;
+        return 10000-money_to_lended;
     }
 };
 int main()
@@ -146,5 +122,6 @@ int main()
         cout << "Duration for which u want to lend\n";
         cin >> y;
         b.set_duration_in_months(y);
+        cout<<"Your current balance is "<<b.balance();
     }
 }
